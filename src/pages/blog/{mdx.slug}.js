@@ -1,20 +1,37 @@
 import * as React from "react";
-import { graphql } from "gatsby";
+import { graphql, Link } from "gatsby";
 import { MDXRenderer } from "gatsby-plugin-mdx";
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
 import Layout from "../../components/layout";
+import { container, mainContent, sideContent, sideHeading, navLinkList, navLinkItem, navLinkText } from "./{mdx.slug}.module.css";
 
 const BlogPost = ({ data }) => {
 	const image = getImage(data.mdx.frontmatter.hero_image);
 
+	console.log(data.allMdx.nodes);
+
 	return (
-		<Layout pageTitle={data.mdx.frontmatter.title}>
-			<p>{data.mdx.frontmatter.date}</p>
-			<GatsbyImage image={image} alt={data.mdx.frontmatter.hero_image_alt} />
-			<p>
-				Photo Credit: <a href={data.mdx.frontmatter.hero_image_credit_link}>{data.mdx.frontmatter.hero_image_credit_text}</a>
-			</p>
-			<MDXRenderer>{data.mdx.body}</MDXRenderer>
+		<Layout pageTitle={data.mdx.frontmatter.title} contentClassName={container}>
+			<div className={mainContent}>
+				<p>{data.mdx.frontmatter.date}</p>
+				<GatsbyImage image={image} alt={data.mdx.frontmatter.hero_image_alt} />
+				<p>
+					Photo Credit: <a href={data.mdx.frontmatter.hero_image_credit_link}>{data.mdx.frontmatter.hero_image_credit_text}</a>
+				</p>
+				<MDXRenderer>{data.mdx.body}</MDXRenderer>
+			</div>
+			<div className={sideContent}>
+				<p className={sideHeading}>Other posts you might like:</p>
+				<ul className={navLinkList}>
+					{data.allMdx.nodes.map((node) => (
+						<li key={node.id} className={navLinkItem}>
+							<Link className={navLinkText} to={`/blog/${node.slug}`}>
+								{node.frontmatter.title}
+							</Link>
+						</li>
+					))}
+				</ul>
+			</div>
 		</Layout>
 	);
 };
@@ -34,6 +51,15 @@ export const query = graphql`
 						gatsbyImageData
 					}
 				}
+			}
+		}
+		allMdx(sort: { fields: frontmatter___date, order: DESC }) {
+			nodes {
+				frontmatter {
+					title
+				}
+				id
+				slug
 			}
 		}
 	}

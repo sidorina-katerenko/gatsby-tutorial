@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+}
+
+.main-content {
+  margin-right: 10px;
+  width: 75%;
+}
+
+.side-content {
+  padding: 0 15px 15px;
+  border-left: 2px solid rebeccapurple;
+}
+
+.side-heading {
+  color: rebeccapurple;
+  font-weight: bold;
+}
+
+.nav-link-list {
+  padding-left: 15px;
+}
+
+.nav-link-item {
+  margin-bottom: 5px;
+}
+
+.nav-link-text {
+  color: black;
+}
